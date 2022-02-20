@@ -1,0 +1,24 @@
+elemDistintos:
+
+        li	$s0, 1
+        li	$s1, 1
+	lw	$t6, 0($a0)
+
+for:
+	slt	$t2, $s1, $a1
+        beq	$t2, $zero, cont1
+	
+	move	$t5, $t6 
+	addi	$a0, $a0, 4
+	lw	$t6, 0($a0)		
+	
+	beq	$t6, $t5, cont
+	addi	$s0, $s0, 1
+
+cont:
+	addi	$s1, $s1, 1
+	j 	for
+
+cont1:
+	move 	$v0, $s0
+	jr	$ra
