@@ -1,0 +1,31 @@
+bitparidade:
+	# a0 = numero
+	# v0 = bit paridade 
+	# v1 = novo numero
+
+	move	$t0, $zero		# counter = 0
+	li	$t1, 1			# iterador
+
+for:	#conta qtd de bit 1
+	and	$t2, $a0, $t1		# $t2 = numero & iterador
+	slt	$t2, $zero, $t2		# $t2 = (0 < $t2) ? 1 : 0
+	add	$t0, $t2, $t0		# counter++
+	
+	sll	$t1, $t1, 1		# t1 = $t1 << 1
+
+	blt	$t1, 128, for		# if $t1 < 128 then for
+	
+exit1:
+	li	$t3, 2			# t3 = 2
+	div	$t0, $t3		# t0 / 2 
+	mfhi	$v0			# v0 = t0 mod 2 (bit paridade)
+
+	move	$v1, $a0
+
+	beq	$v0, $zero, skip	# if v0 == 0 nao somar
+	
+	add	$v1, $t1, $a0		# v1 = paridade + numero	
+
+skip:
+	jr	$ra			# jump to $ra
+	
