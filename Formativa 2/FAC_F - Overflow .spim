@@ -1,0 +1,64 @@
+.data
+
+	msg: .asciiz "overflow\n"
+
+.text
+main:
+
+	li $v0, 5			# lendo primeira entrada 1 = soma com sinal; 0 =  soma sem sinal
+	syscall 
+	move $t0, $v0
+	
+	li $v0, 5			# lendo primeiro int
+	syscall 
+	move $t1, $v0
+	
+	li $v0, 5			# lendo segundo int
+	syscall 
+	move $t2, $v0
+	
+	srl $s1, $t1, 31		# transformando o bit significativo no menos significativo 
+	srl $s2, $t2, 31		# transformando o bit significativo no menos significativo 
+	
+	beq $t0, $zero, somasemsinal	# se t0 = 0 soma sem sinal
+	
+	addu $s0, $t1, $t2		# soma com overflow
+	
+	srl $s3, $s0, 31		# transformando o bit significativo do resultado da soma no menos significativo 
+	
+	beq $s2, $s1, confirma		# se s2 == s1
+	j exit
+
+confirma:
+	beq $s3, $s1, confirma1		# se s3 == s1
+	
+	j imprime
+	
+confirma1:
+
+	beq $s3, $s2, exit		# se s3 == s2 
+	
+	j imprime
+	
+imprime:
+	
+	li $v0, 4			# imprime mensagem
+	la $a0, msg
+	syscall
+	
+	li $v0, 10 			#return 0
+	syscall
+
+somasemsinal:
+	
+	addu $s0, $t1, $t2	
+	bltu $s0, $t1, imprime
+	bltu $s0, $t2, imprime
+	
+exit:
+	li $v0, 1
+	move $a0, $s0 
+	syscall 
+	
+	li $v0, 10 			#return 0
+	syscall 
