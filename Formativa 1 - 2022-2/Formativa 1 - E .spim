@@ -1,0 +1,72 @@
+.data
+
+	esp: .asciiz " "
+	ast: .asciiz "*"
+	queb: .asciiz "\n"
+	
+.text	
+main:
+	li $v0, 5 		#lendo n
+	syscall
+	move $s0, $v0 		# $s0 = n
+	
+	addi $s1, $s1, 1	# j = 1
+	addi $s2, $s2, 1	# ast = 1
+	add $s4, $s4, $s0	# s0 = s4
+	move $s3, $zero		# s3 = 0
+	move $t0, $zero		# i = 0
+	
+for1:
+	sub $s1, $s1, $t1
+	move $t1, $zero
+	
+	sub $s3, $s3, $t2
+	move $t2, $zero
+	
+	slt $t7, $t0, $s0		# (i < n)
+	beq $t7, $zero, exit		
+	
+	addi $t0, $t0, 1		# i++
+	j for2
+	
+for2:
+
+	slt $t6, $s1, $s4		# j < s4 ---- s4 = n
+	beq $t6, $zero, for3
+	
+	li $v0, 4			# imprime espaco
+	la $a0, esp
+	syscall
+	
+	addi $s1, $s1, 1
+	addi $t1, $t1, 1		# j++
+	j for2
+	
+for3:
+	
+	slt $t5, $s3, $s2		# k < aste
+	beq $t5, $zero, continue
+	
+	li $v0, 4
+	la $a0, ast
+	syscall
+			
+	addi $s3, $s3, 1		# k++
+	addi $t2, $t2, 1
+	j for3
+	
+continue:
+	
+	addi $s2, $s2, 2
+	addi $s4, $s4, -1
+	
+	li $v0, 4
+	la $a0, queb
+	syscall
+	
+	j for1
+	
+
+exit:
+	li $v0, 10 #return 0
+	syscall  

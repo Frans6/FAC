@@ -1,0 +1,83 @@
+.data
+
+	LETRAA: .asciiz "A"
+	LETRAB: .asciiz "B"
+	LETRAC: .asciiz "C"
+	LETRAD: .asciiz "D"
+	LETRAE: .asciiz "E"
+	
+.text	
+main:
+	li $v0, 5 		#lendo n
+	syscall
+	move $s0, $v0 		# $s0 = n
+	
+	li $s1, -1		# $s1 == -1
+	li $t0, 0		# $t0 == 0
+	li $t1, 35		# $t1 == 35
+	li $t2, 60		# $t2 == 60
+	li $t3, 85		# $t3 == 85
+	li $t4, 100		# $t4 == 100
+	
+	slt $s2, $s1, $s0
+	beq $s2, $zero, exit
+	
+	slt $t9, $t0, $s0	# (a < n)
+	beq $t9, $zero, imprimeE
+	
+	slt $t8, $t1, $s0
+	beq $t8, $zero, imprimeD
+	
+	slt $t7, $t2, $s0
+	beq $t7, $zero, imprimeC
+	
+	slt $t6, $t3, $s0
+	beq $t6, $zero, imprimeB
+	
+	slt $t5, $t4, $s0
+	beq $t5, $zero, imprimeA
+	
+	j exit
+	
+imprimeE:
+	
+	li $v0, 4
+	la $a0, LETRAE 
+	syscall
+	
+	j exit
+	
+imprimeD:
+  	
+  	li $v0, 4
+	la $a0, LETRAD
+	syscall
+
+	j exit
+	
+imprimeC:
+  	
+  	li $v0, 4
+	la $a0, LETRAC
+	syscall
+
+	j exit
+	
+imprimeB:
+  	
+  	li $v0, 4
+	la $a0, LETRAB 
+	syscall
+
+	j exit
+	
+imprimeA:
+  	
+  	li $v0, 4
+	la $a0, LETRAA
+	syscall
+
+exit:
+	
+	li $v0, 10 #return 0
+	syscall
